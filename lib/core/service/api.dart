@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:github_dashboard/core/model/user.dart';
 import 'package:http/http.dart' as http;
 
 /// The service responsible for networking requests
 class Api {
-  static const endpoint = 'https://api.the-ring.io';
-
-//  static const endpoint = 'http://192.168.5.1:3600';
+  static const endpoint = 'https://api.github.com';
 
   http.Client get client {
     return http.Client();
@@ -17,5 +16,28 @@ class Api {
     return NetworkImage('$name');
     // return NetworkImage('$endpoint/image/$name');
   }
+
+  Future<User?> getUser(String username) async {
+    print("api getUser : called");
+
+    String url = '$endpoint/users/$username';
+    Uri uri = Uri.parse(url);
+    print(uri);
+
+    var response = await client.get(
+      uri,
+    );
+    print("api getUser : got response ${response.statusCode}");
+
+    if(response.statusCode == 200){
+      Map<String,dynamic> jsonData = (json.decode(response.body));
+
+      User data = User.fromJson(jsonData);
+      return data;
+    }
+    return null;
+  }
+
+
 
 }

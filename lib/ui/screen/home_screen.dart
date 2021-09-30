@@ -4,6 +4,7 @@ import 'package:github_dashboard/core/enum/view_state.dart';
 import 'package:github_dashboard/core/viewmodel/app_model.dart';
 
 import 'loading_screen.dart';
+import 'search_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class HomeScreen extends StatelessWidget {
           if (model.state == ViewState.Busy) {
             return LoadingScreen();
           }
-          return Container();
+          return SearchScreen();
         });
   }
 }
