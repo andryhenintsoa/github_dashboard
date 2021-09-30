@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:github_dashboard/core/base_view.dart';
 import 'package:github_dashboard/core/enum/view_state.dart';
 import 'package:github_dashboard/core/viewmodel/search_model.dart';
+import 'package:github_dashboard/ui/screen/repo_screen.dart';
 import 'package:github_dashboard/ui/styling.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -41,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return SafeArea(
       child: WillPopScope(
         onWillPop: () async {
-          if(currentModel.user != null){
+          if (currentModel.user != null) {
             currentModel.goSearch();
             return false;
           }
@@ -123,7 +124,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             clipBehavior: Clip.antiAlias,
                             child: Material(
                               child: ListTile(
-                                onTap: () {},
+                                onTap: () {
+                                  print("here");
+                                  Navigator.pushNamed(context, RepoScreen.route,
+                                      arguments: RepoScreenArgument(repo: e));
+                                },
                                 leading: Icon(Icons.inbox),
                                 title: Text(
                                   e.name,
@@ -156,7 +161,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: Material(
                               elevation: 2,
                               color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(4)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4)),
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8.0),
@@ -207,41 +213,6 @@ class _SearchScreenState extends State<SearchScreen> {
               );
             }),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CityButton extends StatelessWidget {
-  const CityButton({Key? key, required this.text, this.onTap})
-      : super(key: key);
-
-  final String text;
-  final Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 8.0,
-      ),
-      child: ConstrainedBox(
-        constraints: BoxConstraints.expand(height: 48.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.white,
-            shadowColor: lightGreyColor(),
-          ),
-          onPressed: () {
-            onTap?.call();
-          },
-          child: Text(this.text,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .apply(color: Colors.black)),
         ),
       ),
     );

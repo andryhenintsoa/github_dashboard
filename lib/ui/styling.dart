@@ -36,7 +36,7 @@ ThemeData theme() => ThemeData(
     headline4: TextStyle(
       fontSize: 20.0,
       fontWeight: FontWeight.w400,
-      color: mainTextColor().withOpacity(0.4),
+      color: mainTextColor(),
     ),
     bodyText1: TextStyle(
       fontSize: 16.0,

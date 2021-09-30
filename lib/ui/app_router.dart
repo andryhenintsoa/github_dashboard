@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:github_dashboard/ui/screen/home_screen.dart';
+import 'package:github_dashboard/ui/screen/repo_screen.dart';
 
 class AppRouter {
   static final String initialRoute = "/";
@@ -9,6 +10,12 @@ class AppRouter {
       case '/':
         return MaterialPageRoute(
             builder: (_) => HomeScreen(), settings: settings);
+      case RepoScreen.route:
+        var data = settings.arguments as RepoScreenArgument;
+        return MaterialPageRoute(
+          builder: (_) => RepoScreen.withArgument(argument: data),
+          settings: settings,
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

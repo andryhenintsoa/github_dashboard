@@ -53,6 +53,7 @@ class Api {
     print("api getRepository : got response ${response.statusCode}");
 
     if (response.statusCode == 200) {
+      await Future.delayed(Duration(seconds: 2));
       List<dynamic> jsonData = (json.decode(response.body));
 
       List<Repo> data = [];
