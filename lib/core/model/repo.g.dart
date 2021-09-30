@@ -12,6 +12,7 @@ Repo _$RepoFromJson(Map<String, dynamic> json) {
     language: json['language'] as String?,
     description: json['description'] as String?,
     htmlUrl: json['html_url'] as String,
+    stargazersCount: json['stargazers_count'] as int,
   );
 }
 
@@ -20,4 +21,5 @@ Map<String, dynamic> _$RepoToJson(Repo instance) => <String, dynamic>{
       'language': instance.language,
       'description': instance.description,
       'html_url': instance.htmlUrl,
+      'stargazers_count': instance.stargazersCount,
     };

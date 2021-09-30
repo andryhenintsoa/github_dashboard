@@ -10,8 +10,15 @@ class Repo {
   final String? language;
   final String? description;
   final String htmlUrl;
+  final int stargazersCount;
 
-  Repo({required this.name, this.language, this.description, required this.htmlUrl});
+  Repo({
+    required this.name,
+    this.language,
+    this.description,
+    required this.htmlUrl,
+    required this.stargazersCount,
+  });
 
   factory Repo.fromJson(Map<String, dynamic> json) => _$RepoFromJson(json);
 

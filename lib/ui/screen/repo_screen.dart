@@ -50,6 +50,31 @@ class RepoScreen extends StatelessWidget {
           child: Column(
             children: [
               TitledContainer(
+                title: "Stars",
+                children: [
+                  Text(repo.stargazersCount.toString()),
+                ],
+              ),
+              if (repo.language != null) ...[
+                SizedBox(height: 8.0),
+                TitledContainer(
+                  title: "Language",
+                  children: [
+                    Text(repo.language!),
+                  ],
+                ),
+              ],
+              if (repo.description != null) ...[
+                SizedBox(height: 8.0),
+                TitledContainer(
+                  title: "Description",
+                  children: [
+                    Text(repo.description!),
+                  ],
+                ),
+              ],
+              SizedBox(height: 8.0),
+              TitledContainer(
                 title: "Link",
                 children: [
                   RichText(
@@ -72,61 +97,8 @@ class RepoScreen extends StatelessWidget {
                   )
                 ],
               ),
-              if (repo.language != null) ...[
-                SizedBox(height: 8.0),
-                TitledContainer(
-                  title: "Language",
-                  children: [
-                    Text(repo.language!),
-                  ],
-                )
-              ],
-              if (repo.language != null) ...[
-                SizedBox(height: 8.0),
-                TitledContainer(
-                  title: "Description",
-                  children: [
-                    Text(repo.description!),
-                  ],
-                ),
-              ],
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CityButton extends StatelessWidget {
-  const CityButton({Key? key, required this.text, this.onTap})
-      : super(key: key);
-
-  final String text;
-  final Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 8.0,
-      ),
-      child: ConstrainedBox(
-        constraints: BoxConstraints.expand(height: 48.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.white,
-            shadowColor: lightGreyColor(),
-          ),
-          onPressed: () {
-            onTap?.call();
-          },
-          child: Text(this.text,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .apply(color: Colors.black)),
         ),
       ),
     );

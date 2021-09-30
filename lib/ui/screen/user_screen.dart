@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:github_dashboard/core/base_view.dart';
@@ -93,93 +94,104 @@ class _UserScreenState extends State<UserScreen> {
           color: lightGreyColor(),
           width: double.infinity,
           height: double.infinity,
-          child: BaseView<UserModel>(onModelReady: (model) {
-            model.setUser(widget.user);
-            model.searchRepositoryForCurrentUser();
-          }, builder: (context, model, child) {
-            currentModel = model;
+          child: BaseView<UserModel>(
+            onModelReady: (model) {
+              model.setUser(widget.user);
+              model.searchRepositoryForCurrentUser();
+            },
+            builder: (context, model, child) {
+              currentModel = model;
 
-            if (model.flashMessage != null) {
-              Fluttertoast.showToast(
-                msg: model.flashMessage!,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.black54,
-                textColor: Colors.white,
-              );
-              model.flashMessage = null;
-            }
+              if (model.flashMessage != null) {
+                Fluttertoast.showToast(
+                  msg: model.flashMessage!,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black54,
+                  textColor: Colors.white,
+                );
+                model.flashMessage = null;
+              }
 
-            if (model.state == ViewState.Busy && model.repos.isEmpty)
-            return ListView.builder(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              shrinkWrap: true,
-              itemCount: 6,
-              itemBuilder: (_, __) => Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(16.0),
-                  ),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Container(
+              if (model.state == ViewState.Busy && model.repos.isEmpty)
+                return ListView.builder(
                   padding: EdgeInsets.symmetric(
                     horizontal: 16.0,
-                    vertical: 16.0,
+                    vertical: 8.0,
                   ),
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey[200]!,
-                    highlightColor: Colors.grey[100]!,
-                    enabled: true,
-                    child: Row(
-                      children: [
-                        Icon(Icons.inbox),
-                        SizedBox(width: 32),
-                        ShimmerContainer.text(
-                          width: 100,
-                          randomRangeWidth: 200,
+                  shrinkWrap: true,
+                  itemCount: 6,
+                  itemBuilder: (_, __) => Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(16.0),
+                      ),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 16.0,
+                      ),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[200]!,
+                        highlightColor: Colors.grey[100]!,
+                        enabled: true,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Icon(Icons.inbox),
+                            SizedBox(width: 32),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ShimmerContainer.text(
+                                    width: 100,
+                                    randomRangeWidth: 200,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-            return ListView.builder(
-              controller: _scrollController,
-              padding: EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              itemCount: model.repos.length,
-              itemBuilder: (BuildContext context, int index) {
-                var e = model.repos[index];
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(16.0),
-                    ),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: Material(
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.pushNamed(context, RepoScreen.route,
-                            arguments: RepoScreenArgument(repo: e));
-                      },
-                      leading: Icon(Icons.inbox),
-                      title: Text(
-                        e.name,
-                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ),
                   ),
                 );
-              },
-            );
-          }),
+              return ListView.builder(
+                controller: _scrollController,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                itemCount: model.repos.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var e = model.repos[index];
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(16.0),
+                      ),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Material(
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.pushNamed(context, RepoScreen.route,
+                              arguments: RepoScreenArgument(repo: e));
+                        },
+                        leading: Icon(Icons.inbox),
+                        title: Text(
+                          e.name,
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );
