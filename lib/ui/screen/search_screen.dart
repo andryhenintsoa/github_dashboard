@@ -33,27 +33,55 @@ class SearchScreen extends StatelessWidget {
           width: double.infinity,
           height: double.infinity,
           child: BaseView<SearchModel>(builder: (context, model, child) {
-
-
             if (model.user != null) {
-              return Chip(
-                deleteIcon: Icon(Icons.close),
-                onDeleted: () {
-                  model.goSearch();
-                },
-                avatar: (model.user!.avatarUrl == null)
-                    ? null
-                    : Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    image: DecorationImage(
-                      image: NetworkImage(model.user!.avatarUrl!),
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+              return SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
                 ),
-                label: Text(model.user!.name ?? model.user!.login),
+                child: Column(
+                  children: [
+                    Chip(
+                      deleteIcon: Icon(Icons.close),
+                      onDeleted: () {
+                        model.goSearch();
+                      },
+                      avatar: (model.user!.avatarUrl == null)
+                          ? null
+                          : Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                image: DecorationImage(
+                                  image: NetworkImage(model.user!.avatarUrl!),
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                      label: Text(model.user!.name ?? model.user!.login),
+                    ),
+                    ...model.repos.map(
+                      (e) => Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(16.0),
+                          ),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: Material(
+                          child: ListTile(
+                            onTap: () {},
+                            leading: Icon(Icons.inbox),
+                            title: Text(
+                              e.name,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               );
             }
 

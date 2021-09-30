@@ -15,7 +15,7 @@ Color accentColor({double opacity = 1}) {
   return Color(((opacity * 255).ceil() << 24) | 0x00EF4B4C);
 }
 
-Color lightGreyColor() => Color(0xFFECECEC);
+Color lightGreyColor() => Color(0xFFEFEFEF);
 Color darkGreyColor() => Color(0xFFA0A0A0);
 
 ThemeData theme() => ThemeData(

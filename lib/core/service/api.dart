@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:github_dashboard/core/model/repo.dart';
 import 'package:github_dashboard/core/model/user.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,8 +30,8 @@ class Api {
     );
     print("api getUser : got response ${response.statusCode}");
 
-    if(response.statusCode == 200){
-      Map<String,dynamic> jsonData = (json.decode(response.body));
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = (json.decode(response.body));
 
       User data = User.fromJson(jsonData);
       return data;
@@ -38,6 +39,31 @@ class Api {
     return null;
   }
 
+  Future<List<Repo>?> getRepository(User user) async {
+    print("api getRepository : called");
 
+    String url = user.reposUrl!;
+    Uri uri = Uri.parse(url);
+    print(uri);
 
+    var response = await client.get(
+      uri,
+    );
+    print("api getRepository : got response ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonData = (json.decode(response.body));
+
+      List<Repo> data = [];
+
+      jsonData.forEach((element) {
+        if (element is Map<String, dynamic>) {
+          data.add(Repo.fromJson(element));
+        }
+      });
+
+      return data;
+    }
+    return null;
+  }
 }
