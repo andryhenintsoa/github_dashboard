@@ -39,10 +39,11 @@ class Api {
     return null;
   }
 
-  Future<List<Repo>?> getRepository(User user) async {
+  Future<List<Repo>?> getRepository(User user, {int page = 1}) async {
     print("api getRepository : called");
 
     String url = user.reposUrl!;
+    url += '?page=$page';
     Uri uri = Uri.parse(url);
     print(uri);
 

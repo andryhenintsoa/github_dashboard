@@ -16,6 +16,9 @@ class SearchModel extends BaseModel {
   User? user;
   List<Repo> repos = [];
 
+  int _currentPage = 0;
+  bool _isFetchingData = false;
+
   void goSearch() {
     user = null;
     repos = [];
@@ -44,15 +47,26 @@ class SearchModel extends BaseModel {
     });
   }
 
-  Future searchRepositoryForCurrentUser() async {
+  Future searchRepositoryForCurrentUser({int? page}) async {
     if (user?.reposUrl == null) {
       repos = [];
       return;
     }
 
-    await _api.getRepository(user!).then((result) {
+    if(page == null){
+      // If page == null, it the first time to get user's repos
+      repos = [];
+      _currentPage = 1;
+    }
+    else{
+      // Else, it's a loading of next repos (according to pagination)
+      // so, no reinit of repos list
+      _currentPage = page;
+    }
+
+    await _api.getRepository(user!, page: _currentPage).then((result) {
       if (result != null) {
-        repos = result;
+        repos.addAll(result);
       }
     }).catchError(errorHandler);
 
@@ -66,4 +80,16 @@ class SearchModel extends BaseModel {
       flashMessage = "Unhandled Error : $e";
     }
   }
+
+  ///Fetching the next posts
+  ///
+  ///[_isFetchingData] is used to prevent fetching the same data
+  ///[_currentPage] is incremented as we are searching the next data
+  Future getNextRepos() async {
+    if (_isFetchingData) return;
+    _isFetchingData = true;
+    await searchRepositoryForCurrentUser(page: _currentPage + 1);
+    _isFetchingData = false;
+  }
+
 }
