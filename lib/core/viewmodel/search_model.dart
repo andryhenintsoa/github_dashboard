@@ -10,6 +10,7 @@ import '../service_locator.dart';
 
 class SearchModel extends BaseModel {
   Api _api = locator<Api>();
+  String? flashMessage;
 
   String? searchedUsername;
   User? user;
@@ -29,14 +30,16 @@ class SearchModel extends BaseModel {
 
     await _api.getUser(searchedUsername!).then((result) {
       user = result;
-      searchRepositoryForCurrentUser();
-    }).catchError((dynamic e, StackTrace trace) {
-      if (e is SocketException) {
-        print('$e');
-      } else {
-        print('Unhandled Error : $e');
+      if(result == null){
+        flashMessage = "User not found";
+        setState(ViewState.Idle);
+      }
+      else{
+        searchRepositoryForCurrentUser();
       }
 
+    }).catchError((dynamic e, StackTrace trace) {
+      errorHandler(e,trace);
       setState(ViewState.Idle);
     });
   }
@@ -51,14 +54,16 @@ class SearchModel extends BaseModel {
       if (result != null) {
         repos = result;
       }
-    }).catchError((dynamic e, StackTrace trace) {
-      if (e is SocketException) {
-        print('$e');
-      } else {
-        print('Unhandled Error : $e');
-      }
-    });
+    }).catchError(errorHandler);
 
     setState(ViewState.Idle);
+  }
+
+  errorHandler(dynamic e, StackTrace trace) {
+    if (e is SocketException) {
+      flashMessage = "Network error, please try again";
+    } else {
+      flashMessage = "Unhandled Error : $e";
+    }
   }
 }

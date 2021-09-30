@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:github_dashboard/core/base_view.dart';
+import 'package:github_dashboard/core/enum/view_state.dart';
 import 'package:github_dashboard/core/viewmodel/search_model.dart';
 import 'package:github_dashboard/ui/styling.dart';
 
@@ -33,6 +36,20 @@ class SearchScreen extends StatelessWidget {
           width: double.infinity,
           height: double.infinity,
           child: BaseView<SearchModel>(builder: (context, model, child) {
+
+            if(model.flashMessage != null){
+
+              Fluttertoast.showToast(
+                msg: model.flashMessage!,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.black54,
+                textColor: Colors.white,
+              );
+              model.flashMessage = null;
+            }
+
+
+
             if (model.user != null) {
               return SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
@@ -125,8 +142,9 @@ class SearchScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 8.0),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(minHeight: 48.0),
+                      Container(
+                        height: 48.0,
+                        width: 100,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             elevation: 2,
@@ -136,7 +154,12 @@ class SearchScreen extends StatelessWidget {
                           onPressed: () {
                             model.searchUser(searchController.text);
                           },
-                          child: Text("Search"),
+                          child: model.state == ViewState.Busy
+                              ? SpinKitThreeBounce(
+                            size: 20,
+                                  color: Colors.white,
+                                )
+                              : Text("Search"),
                         ),
                       ),
                     ],
