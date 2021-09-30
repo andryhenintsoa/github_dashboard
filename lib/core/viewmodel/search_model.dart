@@ -16,16 +16,13 @@ class SearchModel extends BaseModel {
   User? user;
   List<Repo> repos = [];
 
-  int _currentPage = 0;
-  bool _isFetchingData = false;
-
   void goSearch() {
     user = null;
     repos = [];
     setState(ViewState.Idle);
   }
 
-  Future searchUser(String username) async {
+  Future searchUser(String username, {Null Function(User)? onSuccess}) async {
     setState(ViewState.Busy);
 
     searchedUsername = username;
@@ -38,38 +35,12 @@ class SearchModel extends BaseModel {
         setState(ViewState.Idle);
       }
       else{
-        searchRepositoryForCurrentUser();
+        onSuccess?.call(user!);
       }
 
     }).catchError((dynamic e, StackTrace trace) {
       errorHandler(e,trace);
-      setState(ViewState.Idle);
     });
-  }
-
-  Future searchRepositoryForCurrentUser({int? page}) async {
-    if (user?.reposUrl == null) {
-      repos = [];
-      return;
-    }
-
-    if(page == null){
-      // If page == null, it the first time to get user's repos
-      repos = [];
-      _currentPage = 1;
-    }
-    else{
-      // Else, it's a loading of next repos (according to pagination)
-      // so, no reinit of repos list
-      _currentPage = page;
-    }
-
-    await _api.getRepository(user!, page: _currentPage).then((result) {
-      if (result != null) {
-        repos.addAll(result);
-      }
-    }).catchError(errorHandler);
-
     setState(ViewState.Idle);
   }
 
@@ -80,16 +51,4 @@ class SearchModel extends BaseModel {
       flashMessage = "Unhandled Error : $e";
     }
   }
-
-  ///Fetching the next posts
-  ///
-  ///[_isFetchingData] is used to prevent fetching the same data
-  ///[_currentPage] is incremented as we are searching the next data
-  Future getNextRepos() async {
-    if (_isFetchingData) return;
-    _isFetchingData = true;
-    await searchRepositoryForCurrentUser(page: _currentPage + 1);
-    _isFetchingData = false;
-  }
-
 }
