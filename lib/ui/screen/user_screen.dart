@@ -45,7 +45,6 @@ class _UserScreenState extends State<UserScreen> {
     if (_scrollController.offset >=
             _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      print("bottom reached");
       await currentModel.getNextRepos();
     }
   }

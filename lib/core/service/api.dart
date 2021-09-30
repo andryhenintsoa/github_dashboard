@@ -19,16 +19,13 @@ class Api {
   }
 
   Future<User?> getUser(String username) async {
-    print("api getUser : called");
 
     String url = '$endpoint/users/$username';
     Uri uri = Uri.parse(url);
-    print(uri);
 
     var response = await client.get(
       uri,
     );
-    print("api getUser : got response ${response.statusCode}");
 
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonData = (json.decode(response.body));
@@ -40,17 +37,14 @@ class Api {
   }
 
   Future<List<Repo>?> getRepository(User user, {int page = 1}) async {
-    print("api getRepository : called");
 
     String url = user.reposUrl!;
     url += '?page=$page';
     Uri uri = Uri.parse(url);
-    print(uri);
 
     var response = await client.get(
       uri,
     );
-    print("api getRepository : got response ${response.statusCode}");
 
     if (response.statusCode == 200) {
       List<dynamic> jsonData = (json.decode(response.body));
